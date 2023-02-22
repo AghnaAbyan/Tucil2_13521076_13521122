@@ -8,6 +8,6 @@
 
 ## Identitas Pembuat
 | Nama                     | NIM      | Username   |
-| ------------------------ | -------- | ---------- |
+| :---: | :---: | :---: |
 | Moh. Aghna Maysan Abyan  | 13521076 | AghnaAbyan |
 | Ulung Adi Putra          | 13521122 | Ulung32    |
