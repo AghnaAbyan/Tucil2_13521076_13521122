@@ -10,7 +10,7 @@ def createRandomPoint (n, dimensy = 3):
     for i in range(n):
         Point = []
         for j in range(dimensy):
-            temp = random.uniform(0,100)
+            temp = random.uniform(-10,10)
             Point.append(temp)
         arrayOfPoint.append(Point)
     return arrayOfPoint
@@ -40,6 +40,30 @@ def BFSolution (arrayOfPoint):
 
     return shortest, Point1, Point2, indeks1, indeks2
 
+
+def partitionOnX(arrayOfPoint, i, j, k):
+    pivot = arrayOfPoint[k]
+    p = i
+    q = j
+    while(p<q):
+        while(arrayOfPoint[p][0] < pivot[0]):
+            p+=1
+        while(arrayOfPoint[q][0] > pivot[0]):
+            q-=1
+        if(p < q):
+            temp = arrayOfPoint[p]
+            arrayOfPoint[p] = arrayOfPoint[q]
+            arrayOfPoint[q] = temp
+            p+=1
+            q -=1
+
+def quickSort(arrayOfPoints, i, j):
+    if(i < j):
+        k = (i+j)//2
+        partitionOnX(arrayOfPoints, i, j, k)
+        quickSort(arrayOfPoints, i, k)
+        quickSort(arrayOfPoints, k+1, j)
+
 def visualize (arrayOfPoint, Point1, Point2):
     if(len(Point1) > 3):
         print("Gabisa divisualisaiin mas, kamu bukan dewa yang bisa liat 3 dimensi keatas !!!!!")
@@ -63,18 +87,23 @@ def visualize (arrayOfPoint, Point1, Point2):
         # Show the plot
         plt.show()
 
-arrayOfPoint = createRandomPoint(64,3)
-data = np.array(arrayOfPoint)
+arrayOfPoint = createRandomPoint(5,2)
 print(arrayOfPoint)
-shortest, Point1, Point2, indeks1, indeks2 = BFSolution(arrayOfPoint)
-print(shortest)
-print(Point1)
-print(Point2)
-print(indeks1)
-print(indeks2)
+partitionOnX(arrayOfPoint, 0, len(arrayOfPoint)-1, len(arrayOfPoint)//2)
+print(arrayOfPoint)
+quickSort(arrayOfPoint, 0, len(arrayOfPoint)-1)
+print(arrayOfPoint)
+# data = np.array(arrayOfPoint)
+# print(arrayOfPoint)
+# shortest, Point1, Point2, indeks1, indeks2 = BFSolution(arrayOfPoint)
+# print(shortest)
+# print(Point1)
+# print(Point2)
+# print(indeks1)
+# print(indeks2)
 
-show = input("Mau divisualisasiin gak gan? (Y/N)")
-if(show == "Y"):
-    visualize(arrayOfPoint, Point1, Point2)
+# show = input("Mau divisualisasiin gak gan? (Y/N)")
+# if(show == "Y"):
+#     visualize(arrayOfPoint, Point1, Point2)
 
 
