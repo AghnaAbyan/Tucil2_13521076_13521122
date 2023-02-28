@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+# import math
 import numpy as np
 import random
 
@@ -26,47 +27,68 @@ def BFSolution (arrayOfPoint):
     shortest = 9999999999999
     Point1 = []
     Point2 = []
-    indeks1 = 0
-    indeks2 = 0
-    for i in range(0, len(arrayOfPoint)-1):
+    count = 0
+    for i in range(0, len(arrayOfPoint) - 1):
         for j in range(i+1, len(arrayOfPoint)):
             distance = euclidianDistance(arrayOfPoint[i], arrayOfPoint[j])
+            count += 1
             if(distance < shortest):
                 shortest = distance
                 Point1 = arrayOfPoint[i]
                 Point2 = arrayOfPoint[j]
-                indeks1 = i
-                indeks2 = j
 
-    return shortest, Point1, Point2, indeks1, indeks2
+    return shortest, Point1, Point2, count
 
-
-def partitionOnX(arrayOfPoint, i, j, k):
-    pivot = arrayOfPoint[k]
+def partitionOnX(arrayOfPoints, i, j):
+    pivot = arrayOfPoints[(i+j)//2][0]
     p = i
     q = j
-    while(p<q):
-        while(arrayOfPoint[p][0] < pivot[0]):
-            p+=1
-        while(arrayOfPoint[q][0] > pivot[0]):
-            q-=1
-        if(p < q):
-            temp = arrayOfPoint[p]
-            arrayOfPoint[p] = arrayOfPoint[q]
-            arrayOfPoint[q] = temp
-            p+=1
-            q -=1
+    while p < q:
+        while arrayOfPoints[p][0] < pivot:
+            p += 1
+        while arrayOfPoints[q][0] > pivot:
+            q -= 1
+        if p <= q:
+            if p != q:
+                temp = arrayOfPoints[p]
+                arrayOfPoints[p] = arrayOfPoints[q]
+                arrayOfPoints[q] = temp
+            p += 1
+            q -= 1
+    return q
 
-def quickSort(arrayOfPoints, i, j):
-    if(i < j):
-        k = (i+j)//2
-        partitionOnX(arrayOfPoints, i, j, k)
-        quickSort(arrayOfPoints, i, k)
-        quickSort(arrayOfPoints, k+1, j)
+
+# def quickSort(arrayOfPoints, i, j):
+#     #how to use: quickSort(arrayOfPoint, 0, len(arrayOfPoint)-1, "x")
+#     if(i < j):
+#         k = partitionOnX(arrayOfPoints, i, j)
+#         quickSort(arrayOfPoints, i, k)
+#         quickSort(arrayOfPoints, k+1, j)
+
+def quicksort(arrayOfPoints):
+    if(len(arrayOfPoints) == 0):
+        return []
+    elif (len(arrayOfPoints) == 1):
+        return arrayOfPoints
+    else:
+        pivot = arrayOfPoints[len(arrayOfPoints) // 2][0] # Select the middle element as pivot based on x-value
+        left = []
+        equal = []
+        right = []
+
+        for point in arrayOfPoints:
+            if point[0] < pivot:
+                left.append(point)
+            elif point[0] == pivot:
+                equal.append(point)
+            else:
+                right.append(point)
+
+        return quicksort(left) + equal + quicksort(right)
 
 def visualize (arrayOfPoint, Point1, Point2):
     if(len(Point1) > 3):
-        print("Gabisa divisualisaiin mas, kamu bukan dewa yang bisa liat 3 dimensi keatas !!!!!")
+        print("Gabisa divisualisaiin gan, kamu bukan dewa yang bisa liat 3 dimensi keatas !!!!!")
     else:
         arrayOfPoint = np.array(arrayOfPoint)
         # Create a 3D plot
@@ -76,7 +98,7 @@ def visualize (arrayOfPoint, Point1, Point2):
         # Plot the data as points
         ax.scatter(arrayOfPoint[:,0], arrayOfPoint[:,1], arrayOfPoint[:,2])
 
-        ax.plot(Point1[0], Point1[1], Point1[2], color = "black")
+        ax.plot(Point1[0], Point1[1], Point1[2], color = "red")
         ax.plot([Point1[0], Point2[0]], [Point1[1], Point2[1]], [Point1[2], Point2[2]], color = "black")
 
         # Set the axis labels
@@ -87,23 +109,71 @@ def visualize (arrayOfPoint, Point1, Point2):
         # Show the plot
         plt.show()
 
-arrayOfPoint = createRandomPoint(5,2)
+def closestPairWithDnC (arrayOfPoint, count):
+    if (len(arrayOfPoint) <= 3):
+        return BFSolution(arrayOfPoint)
+    else:
+        count = 0
+        mid = len(arrayOfPoint)//2
+        left = arrayOfPoint[:mid]
+        right = arrayOfPoint[mid:]
+        middleX = (left[len(left)-1][0] + right[0][0])/2
+        distanceLeft , Point1L, Point2L, count1 = closestPairWithDnC(left, 0)
+        distanceRight, Point1R, Point2R, count2 = closestPairWithDnC(right, 0)
+        count = count1 + count2
+        closest = 0
+        Point1 = []
+        Point2 = []
+        if(distanceLeft > distanceRight):
+            closest = distanceRight
+            Point1 = Point1R
+            Point2 = Point2R
+        else:
+            closest = distanceLeft
+            Point1 = Point1L
+            Point2 = Point2L
+
+        inMiddleRange = []
+        for i in range(0, len(arrayOfPoint)):
+            if(abs(arrayOfPoint[i][0]- middleX) < closest):
+                inMiddleRange.append(arrayOfPoint[i])
+        # quickSort(inMiddleRange, 0, len(inMiddleRange)-1, "y")
+        for i in range (0, len(inMiddleRange)-1):
+            for j in range(i+1, len(inMiddleRange)):
+                if(abs(inMiddleRange[j][1] - inMiddleRange[i][1]) < closest):
+                    distanceMid = euclidianDistance(inMiddleRange[j], inMiddleRange[i])
+                    count +=1
+                    if(distanceMid < closest):
+                        closest = distanceMid
+                        Point1 = inMiddleRange[i]
+                        Point2 = inMiddleRange[j]
+                
+        return closest, Point1, Point2, count
+
+arrayOfPoint = createRandomPoint(1000, 3)
 print(arrayOfPoint)
-partitionOnX(arrayOfPoint, 0, len(arrayOfPoint)-1, len(arrayOfPoint)//2)
-print(arrayOfPoint)
-quickSort(arrayOfPoint, 0, len(arrayOfPoint)-1)
-print(arrayOfPoint)
+arrayOfPoint = quicksort(arrayOfPoint)
+# quickSort(arrayOfPoint, 0, len(arrayOfPoint)-1)
+
+
+shortest, Point1, Point2, count1 = BFSolution(arrayOfPoint)
 # data = np.array(arrayOfPoint)
-# print(arrayOfPoint)
-# shortest, Point1, Point2, indeks1, indeks2 = BFSolution(arrayOfPoint)
-# print(shortest)
-# print(Point1)
-# print(Point2)
-# print(indeks1)
-# print(indeks2)
+shortestdnc, Point1dnc, Point2dnc, count2= closestPairWithDnC(arrayOfPoint, 0)
+print(shortest)
+print(Point1)
+print(Point2)
+print(count1)
+
+print(shortestdnc)
+print(Point1dnc)
+print(Point2dnc)
+print(count2)
 
 # show = input("Mau divisualisasiin gak gan? (Y/N)")
 # if(show == "Y"):
 #     visualize(arrayOfPoint, Point1, Point2)
 
-
+# partitionOnX(arrayOfPoint, 0, len(arrayOfPoint)-1, len(arrayOfPoint)//2)
+# print(arrayOfPoint)
+# quickSort(arrayOfPoint, 0, len(arrayOfPoint)-1)
+# print(arrayOfPoint)
