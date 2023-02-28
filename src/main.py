@@ -11,7 +11,14 @@ print(Fore.BLUE + "╚══════╝╚══════╝╚═══�
 print(Style.RESET_ALL)
                                                                                                                     
 dimension = int(input("Mau berapa dimensi gan? "))
+while(dimension <= 1):
+    print("minimal 2 dimensi woy!! ulangi input!! ")
+    dimension = int(input("Mau berapa dimensi gan? "))
+
 nPoint = int(input("Mau berapa titik gan? "))
+while(nPoint <0):
+    print("Yakali jumlah titik negatif! ulangi input!! ")
+    nPoint = int(input("Mau berapa titik gan? "))
 
 arrayOfPoints = util.createRandomPoint(nPoint, dimension)
 arrayOfPoints = util.quicksort(arrayOfPoints)
