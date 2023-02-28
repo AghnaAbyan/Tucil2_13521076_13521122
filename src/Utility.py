@@ -148,25 +148,3 @@ def closestPairWithDnC (arrayOfPoint, count):
                         Point2 = inMiddleRange[j]
                 
         return closest, Point1, Point2, count
-
-arrayOfPoint = createRandomPoint(10, 3)
-print(arrayOfPoint)
-arrayOfPoint = quicksort(arrayOfPoint)
-
-
-shortest, Point1, Point2, count1 = BFSolution(arrayOfPoint)
-
-shortestdnc, Point1dnc, Point2dnc, count2= closestPairWithDnC(arrayOfPoint, 0)
-print(shortest)
-print(Point1)
-print(Point2)
-print(count1)
-
-print(shortestdnc)
-print(Point1dnc)
-print(Point2dnc)
-print(count2)
-
-show = input("Mau divisualisasiin gak gan? (Y/N)")
-if(show == "Y"):
-    visualize(arrayOfPoint, Point1dnc, Point2dnc)
