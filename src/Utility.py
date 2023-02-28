@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-# import math
 import numpy as np
 import random
 
@@ -11,7 +10,7 @@ def createRandomPoint (n, dimensy = 3):
     for i in range(n):
         Point = []
         for j in range(dimensy):
-            temp = random.uniform(-10,10)
+            temp = random.uniform(-1e6,1e6)
             Point.append(temp)
         arrayOfPoint.append(Point)
     return arrayOfPoint
@@ -58,12 +57,6 @@ def partitionOnX(arrayOfPoints, i, j):
     return q
 
 
-# def quickSort(arrayOfPoints, i, j):
-#     #how to use: quickSort(arrayOfPoint, 0, len(arrayOfPoint)-1, "x")
-#     if(i < j):
-#         k = partitionOnX(arrayOfPoints, i, j)
-#         quickSort(arrayOfPoints, i, k)
-#         quickSort(arrayOfPoints, k+1, j)
 
 def quicksort(arrayOfPoints):
     if(len(arrayOfPoints) == 0):
@@ -90,16 +83,23 @@ def visualize (arrayOfPoint, Point1, Point2):
     if(len(Point1) > 3):
         print("Gabisa divisualisaiin gan, kamu bukan dewa yang bisa liat 3 dimensi keatas !!!!!")
     else:
-        arrayOfPoint = np.array(arrayOfPoint)
-        # Create a 3D plot
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
+        
+        X = []
+        Y = []
+        Z = []
+        for point in (arrayOfPoint):
+            if(point != Point2 and point != Point1):
+                X.append(point[0])
+                Y.append(point[1])
+                Z.append(point[2])
+        
+        ax.scatter(X, Y, Z, color = "blue")
 
-        # Plot the data as points
-        ax.scatter(arrayOfPoint[:,0], arrayOfPoint[:,1], arrayOfPoint[:,2])
-
-        ax.plot(Point1[0], Point1[1], Point1[2], color = "red")
-        ax.plot([Point1[0], Point2[0]], [Point1[1], Point2[1]], [Point1[2], Point2[2]], color = "black")
+        ax.scatter(Point1[0], Point1[1], Point1[2], color = "red")
+        ax.scatter(Point2[0], Point2[1], Point2[2], color = "red")
+        ax.plot([Point1[0], Point2[0]], [Point1[1], Point2[1]], [Point1[2], Point2[2]], color = "red")
 
         # Set the axis labels
         ax.set_xlabel('X')
@@ -137,7 +137,6 @@ def closestPairWithDnC (arrayOfPoint, count):
         for i in range(0, len(arrayOfPoint)):
             if(abs(arrayOfPoint[i][0]- middleX) < closest):
                 inMiddleRange.append(arrayOfPoint[i])
-        # quickSort(inMiddleRange, 0, len(inMiddleRange)-1, "y")
         for i in range (0, len(inMiddleRange)-1):
             for j in range(i+1, len(inMiddleRange)):
                 if(abs(inMiddleRange[j][1] - inMiddleRange[i][1]) < closest):
@@ -150,14 +149,13 @@ def closestPairWithDnC (arrayOfPoint, count):
                 
         return closest, Point1, Point2, count
 
-arrayOfPoint = createRandomPoint(1000, 3)
+arrayOfPoint = createRandomPoint(10, 3)
 print(arrayOfPoint)
 arrayOfPoint = quicksort(arrayOfPoint)
-# quickSort(arrayOfPoint, 0, len(arrayOfPoint)-1)
 
 
 shortest, Point1, Point2, count1 = BFSolution(arrayOfPoint)
-# data = np.array(arrayOfPoint)
+
 shortestdnc, Point1dnc, Point2dnc, count2= closestPairWithDnC(arrayOfPoint, 0)
 print(shortest)
 print(Point1)
@@ -169,11 +167,6 @@ print(Point1dnc)
 print(Point2dnc)
 print(count2)
 
-# show = input("Mau divisualisasiin gak gan? (Y/N)")
-# if(show == "Y"):
-#     visualize(arrayOfPoint, Point1, Point2)
-
-# partitionOnX(arrayOfPoint, 0, len(arrayOfPoint)-1, len(arrayOfPoint)//2)
-# print(arrayOfPoint)
-# quickSort(arrayOfPoint, 0, len(arrayOfPoint)-1)
-# print(arrayOfPoint)
+show = input("Mau divisualisasiin gak gan? (Y/N)")
+if(show == "Y"):
+    visualize(arrayOfPoint, Point1dnc, Point2dnc)
