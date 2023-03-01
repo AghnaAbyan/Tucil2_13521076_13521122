@@ -69,7 +69,7 @@ def quicksort(arrayOfPoints):
 
 def visualize (arrayOfPoint, Point1, Point2):
     if(len(Point1) > 3):
-        print("Gabisa divisualisaiin gan, kamu bukan dewa yang bisa liat 3 dimensi keatas !!!!!")
+        print("Gabisa divisualisasiin gan, kamu bukan dewa yang bisa liat 3 dimensi keatas!!!")
     elif(len(Point1) == 1):
         print("Satu dimensi gabisa divisualisasiin gan! ")
     else:

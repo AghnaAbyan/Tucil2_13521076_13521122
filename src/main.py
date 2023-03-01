@@ -35,7 +35,7 @@ endDnC = time.time()
 DnCtime = endDnC - startDnC
 
 print(Fore.CYAN)
-print("======================================Brute Force Solution======================================")
+print("====================================================Brute Force Solution====================================================")
 print("Jarak Terdekat                       : " +str(shortest))
 print("Koordinat titik pertama              : " +str(Point1))
 print("Koordinat titik kedua                : " +str(Point2))
@@ -43,7 +43,7 @@ print("Banyak operasi euclidian distance    : " +str(count1) + " total operasi "
 print("Waktu eksekusi                       : " +str(BFtime) + " detik (spek = Intel Core i7)")
 
 print(Fore.MAGENTA)
-print("======================================Divide and Conquer Solution======================================")
+print("================================================Divide and Conquer Solution================================================")
 print("Jarak Terdekat                       : " +str(shortestdnc))
 print("Koordinat titik pertama              : " +str(Point1dnc))
 print("Koordinat titik kedua                : " +str(Point2dnc))
